@@ -1,5 +1,7 @@
 package musaev.ibragim.registrationservice.controller;
 
+import musaev.ibragim.registrationservice.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

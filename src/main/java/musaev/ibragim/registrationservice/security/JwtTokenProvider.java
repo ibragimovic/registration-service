@@ -4,7 +4,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
+import musaev.ibragim.registrationservice.service.CustomUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,9 @@ import java.util.function.Function;
 
 @Component
 public class JwtTokenProvider {
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -72,8 +78,12 @@ public class JwtTokenProvider {
         return expiration.before(new Date());
     }
 
-    public Authentication getAuthentication(String token, UserDetails userDetails) {
-        //TODO
+    public Authentication getAuthentication(String token) {
+        String email = extractEmail(token);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        if (userDetails != null){
+            return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        }
         return null;
     }
 }

@@ -1,5 +1,6 @@
 package musaev.ibragim.registrationservice.controller;
 
+import musaev.ibragim.registrationservice.dto.UserRegisterForm;
 import musaev.ibragim.registrationservice.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class RegistrationController {
     private UserService userService;
 
     @PatchMapping
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegisterForm userDTO) {
         if (userService.isUserExists(userDTO.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with this email already exists.");
         }
